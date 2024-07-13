@@ -29,8 +29,9 @@ ConvLSTM and PredRNN were the main models used. Their trained weights (checkpoin
 
 More can be found in the `sample_conv_lstm_pred_img` folder.
 
-### Notes for the future
+# Notes for the future
 - explore more models
 - use different data
 
-
+# Notes on plagiarism
+This paper is not published anywhere, I wrote it out of my own interest. If you found anything inside it useful, a ⭐ on the repo would be great. 
