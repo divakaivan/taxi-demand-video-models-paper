@@ -1,7 +1,8 @@
 import mlflow
 import pandas as pd
 from prefect import flow
-from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 
 from create_adj_matrices import load_taxi_from_api, load_zone_lookup_from_api, get_manhattan_data
 
@@ -28,14 +29,16 @@ def historical_avg_demand():
 
     hourly_data = hourly_data.merge(historical_avg, on=['PULocationID', 'day_of_week', 'hour'], how='left')
 
+    train_data, test_data = train_test_split(hourly_data, test_size=0.2, random_state=42)
+
     with mlflow.start_run():
-        mape = mean_absolute_percentage_error(hourly_data['demand'], hourly_data['historical_avg'])
-        mae = mean_absolute_error(hourly_data['demand'], hourly_data['historical_avg'])
-        rmse = mean_squared_error(hourly_data['demand'], hourly_data['historical_avg'], squared=False)
-        print(f'HA RMSE: {rmse:.4f} \nHA MAE: {mae:.4f} \nHA MAPE: {mape:.4f}')
-        mlflow.log_metric('historical_avg_rmse', rmse)
-        mlflow.log_metric('historical_avg_mae', mae)
-        mlflow.log_metric('historical_avg_mape', mape)
+        train_mse = mean_squared_error(train_data['demand'], train_data['historical_avg'])
+        print(f'Train HA MSE: {train_mse}')
+        mlflow.log_metric('train_loss', train_mse)
+
+        test_mse = mean_squared_error(test_data['demand'], test_data['historical_avg'])
+        print(f'Test HA MSE: {test_mse}')
+        mlflow.log_metric('test_loss', test_mse)
 
 if __name__ == '__main__':
     historical_avg_demand()
