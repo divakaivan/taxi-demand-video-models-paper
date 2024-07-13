@@ -35,3 +35,7 @@ More can be found in the `sample_conv_lstm_pred_img` folder.
 
 # Notes on plagiarism
 This paper is not published anywhere, I wrote it out of my own interest. If you found anything inside it useful, a ⭐ on the repo would be great. 
+
+# Reproducability
+
+If you would like to preproduce this project, you need to setup MLflow (either locally or on GCP/other cloud solution). You can follow the commands in [here](/setup_commands.md). Then run a Prefect flow with `python prefect_flows/file.py` from the root directory in the terminal.
